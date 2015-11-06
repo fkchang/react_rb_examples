@@ -1,3 +1,20 @@
+class Arrow
+  include React::Component
+  def render
+    styles = {
+      width: 0,
+      height: 0,
+      borderLeft: '10px solid transparent',
+      borderRight: '10px solid transparent',
+      # borderBottom: `10px solid ${Colors.get(this.props.id).bg}`,
+      borderBottom: '10px solid gray',
+      marginLeft: 40,
+      position: 'absolute'
+    }
+    div(style: styles)
+  end
+end
+# promised based cache for Release info
 class Release
 
   def initialize
@@ -46,6 +63,8 @@ class Album
     }
 
     styles = {
+      color: 'white',
+      background: 'gray',
       transition: 'all 500ms ease',
       overflow: 'hidden'
     }
@@ -117,10 +136,12 @@ class Albums
       display: 'inline-block',
       margin: IMAGE_MARGIN
     }
+    is_current = current_album == album[:id]
     div(style: album_styles) {
       link(to: "album", params: { album_id: album[:id]}) {
         img(style: {height: IMAGE_SIZE, width: IMAGE_SIZE}, src: album[:file])
       }
+      Arrow(id: album[:id]) if is_current
     }
   end
 
