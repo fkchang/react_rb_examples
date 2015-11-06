@@ -7,14 +7,6 @@ class Album
   end
 end
 
-class AlbumRoute
-  include React::Component
-  def render
-    AlbumRoute(album_id: Albums.current_album)
-  end
-end
-
-
 class Albums
   include React::Router
   # include React::Component
