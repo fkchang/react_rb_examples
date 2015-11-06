@@ -24,7 +24,7 @@ end
 class Album
   include React::Component
   required_param :album_id, type: Integer
-  define_state :info
+  define_state info: Hash.new
 
   def self.release_lookup(id)
     @release ||= Release.new
@@ -51,12 +51,16 @@ class Album
     }
     div(style: styles) {
       div(ref: :container, style: {padding: 20}) {
-        h2(style: {margin: '0 0 10 px 0'}) { info[:title]}
+        h4(style: {margin: '0 0 10 px 0'}) { info[:title] || "Cannot get data"}
         div(style: {WebkitColumnCount: 2}) {
           ol(style: {margin: 0}) {
-            info[:tracklist].each_with_index { |track, i|
-              li(key: i) { "#{track[:title]} #{track[:duration]}"}
-            }
+            if info[:tracklist]
+              info[:tracklist].each_with_index { |track, i|
+                li(key: i) { "#{track[:title]} #{track[:duration]}"}
+              }
+            else
+              li(key: i) {"unable to get data"}
+            end
           }
         }
       }
