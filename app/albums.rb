@@ -6,9 +6,21 @@ class Album
     HTTP.get "https://api.discogs.com/releases/#{Albums.current_album}" do |response|
       info! response.json
     end
-    div {
-      h1 {"Info for Album #{Albums.current_album}"}
-      p {  "this info is #{info.inspect}" }
+    styles = {
+      transition: 'all 500ms ease',
+      overflow: 'hidden'
+    }
+    div(style: styles) {
+      div(ref: :container, style: {padding: 20}) {
+        h2(style: {margin: '0 0 10 px 0'}) { info[:title]}
+        div(style: {WebkitColumnCount: 2}) {
+          ol(style: {margin: 0}) {
+            info[:tracklist].each_with_index { |track, i|
+              li(key: i) { "#{track[:title]} #{track[:duration]}"}
+            }
+          }
+        }
+      }
     }
   end
 end
