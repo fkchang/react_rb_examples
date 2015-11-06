@@ -14,7 +14,7 @@ helpers do
     bob = {}
     Dir['public/bob/*'].each { |filename|
       filename =~ /R-(\d+)-/
-      bob[$1] = "#{filename.sub('public/', '')}"
+      bob[$1] = "#{filename.sub('public', '')}"
     }
     bob.to_json
   end
