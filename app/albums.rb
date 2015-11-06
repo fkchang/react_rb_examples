@@ -24,8 +24,8 @@ class Albums
   define_state :current_album
   export_state :current_album
 
-  routes('/') do
-    route(path: 'album/:album_id', name: 'album', handler: Album)
+  routes('/album') do
+    route(path: ':album_id', name: 'album', handler: Album)
   end
 
   router_param :album_id do |album_id|
