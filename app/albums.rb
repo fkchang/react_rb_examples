@@ -3,7 +3,7 @@ class Album
   required_param :album_id, type: Integer
 
   def render
-    h1 {"Album #{album_id}"}
+    h1 {"Info for Album #{Albums.current_album}"}
   end
 end
 
@@ -35,12 +35,11 @@ class Albums
   define_state viewport_width: `window.innerWidth`
   define_state :last_child_id
 
-=begin
   before_receive_props do |new_props|
-    # alert new_props
-    # last_child_id!
+    last_child_id! new_props[:params][:album_id]
+    current_album! new_props[:params][:album_id]
   end
-=end
+
   def calc_albums_per_row
     full_width = IMAGE_SIZE + (IMAGE_MARGIN * 2)
     (viewport_width/full_width).floor
@@ -73,12 +72,12 @@ class Albums
   end
 
   def render_row(row, index)
-
+    has_current = row.any? { |album| album[:id] == current_album }
     div(key: index) {
       row.each { |album|
         render_album(album)
       }
-      route_handler
+      route_handler if has_current
     }
   end
 
@@ -87,7 +86,6 @@ class Albums
       calc_rows.each_with_index { |row, i|
         render_row(row, i)
       }
-
     }
   end
 end
