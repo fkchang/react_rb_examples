@@ -1,9 +1,15 @@
 class Album
   include React::Component
   required_param :album_id, type: Integer
-
+  define_state :info
   def render
-    h1 {"Info for Album #{Albums.current_album}"}
+    HTTP.get "https://api.discogs.com/releases/#{Albums.current_album}" do |response|
+      info! response.json
+    end
+    div {
+      h1 {"Info for Album #{Albums.current_album}"}
+      p {  "this info is #{info.inspect}" }
+    }
   end
 end
 
