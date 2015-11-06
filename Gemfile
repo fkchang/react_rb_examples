@@ -1,0 +1,10 @@
+source 'http://rubygems.org'
+
+#gem 'opal'
+gem 'opal-browser'
+gem 'reactive-ruby'
+gem 'sinatra'
+gem 'opal-jquery'
+#gem 'react-source'
+gem 'reactive-router'
+gem 'opal-rails'
