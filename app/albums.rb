@@ -1,11 +1,50 @@
+class Release
+
+  def initialize
+    @hash = {}
+  end
+
+  def get(id)
+    promise = Promise.new
+    if @hash[id]
+      puts "cached #{id} results"
+      promise.resolve @hash[id]
+    else
+      puts "getting #[id} from web"
+      HTTP.get "https://api.discogs.com/releases/#{id}" do |response|
+        @hash[id] = response.json
+        promise.resolve @hash[id]
+      end
+
+    end
+    promise
+  end
+end
+
 class Album
   include React::Component
   required_param :album_id, type: Integer
   define_state :info
+
+  def self.release_lookup(id)
+    @release ||= Release.new
+    @release.get(id)
+  end
+
+  after_mount do
+    # animate
+  end
+
+  def animate
+    # height = `#{refs[:container]}.getDOMNode().offsetHeight`
+    alert refs[:container]
+  end
+
   def render
-    HTTP.get "https://api.discogs.com/releases/#{Albums.current_album}" do |response|
-      info! response.json
-    end
+    Album.release_lookup(Albums.current_album).then { |json|
+      info! json
+    }
+
     styles = {
       transition: 'all 500ms ease',
       overflow: 'hidden'
